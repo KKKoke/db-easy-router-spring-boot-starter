@@ -11,11 +11,11 @@ import lombok.extern.slf4j.Slf4j;
  * @desc 哈希路由
  */
 @Slf4j
-public class DBRouterStrategyHashCode implements IDBRouterStrategy {
+public class SimpleHashStrategy implements IDBRouterStrategy {
 
     private DBRouterConfig dbRouterConfig;
 
-    public DBRouterStrategyHashCode(DBRouterConfig dbRouterConfig) {
+    public SimpleHashStrategy(DBRouterConfig dbRouterConfig) {
         this.dbRouterConfig = dbRouterConfig;
     }
 

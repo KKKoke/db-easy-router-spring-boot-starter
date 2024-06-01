@@ -1,10 +1,12 @@
 package com.kkkoke.middleware.db.router.config;
 
 import com.kkkoke.middleware.db.router.aspect.DBRouterJoinPoint;
+import com.kkkoke.middleware.db.router.constant.RouterStrategy;
 import com.kkkoke.middleware.db.router.dynamic.DynamicDataSource;
 import com.kkkoke.middleware.db.router.dynamic.DynamicMybatisPlugin;
 import com.kkkoke.middleware.db.router.strategy.IDBRouterStrategy;
-import com.kkkoke.middleware.db.router.strategy.impl.DBRouterStrategyHashCode;
+import com.kkkoke.middleware.db.router.strategy.impl.ConsistentHashStrategy;
+import com.kkkoke.middleware.db.router.strategy.impl.SimpleHashStrategy;
 import com.kkkoke.middleware.db.router.util.PropertyUtil;
 import org.apache.ibatis.plugin.Interceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -19,6 +21,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author KeyCheung
@@ -53,6 +56,11 @@ public class DataSourceAutoConfig implements EnvironmentAware {
      */
     private String routerKey;
 
+    /**
+     * 路由策略
+     */
+    private String routerStrategy;
+
     @Bean(name = "db-router-point")
     @ConditionalOnMissingBean
     public DBRouterJoinPoint point(DBRouterConfig dbRouterConfig, IDBRouterStrategy dbRouterStrategy) {
@@ -61,7 +69,7 @@ public class DataSourceAutoConfig implements EnvironmentAware {
 
     @Bean
     public DBRouterConfig dbRouterConfig() {
-        return new DBRouterConfig(dbCount, tbCount, routerKey);
+        return new DBRouterConfig(dbCount, tbCount, routerKey, routerStrategy);
     }
 
     @Bean
@@ -90,7 +98,13 @@ public class DataSourceAutoConfig implements EnvironmentAware {
 
     @Bean
     public IDBRouterStrategy dbRouterStrategy(DBRouterConfig dbRouterConfig) {
-        return new DBRouterStrategyHashCode(dbRouterConfig);
+        if (Objects.equals(RouterStrategy.SIMPLE, routerStrategy)) {
+            return new SimpleHashStrategy(dbRouterConfig);
+        } else if (Objects.equals(RouterStrategy.CONSISTENT, routerStrategy)) {
+            return new ConsistentHashStrategy(dbRouterConfig);
+        } else {
+            return null;
+        }
     }
 
     @Bean
@@ -111,6 +125,7 @@ public class DataSourceAutoConfig implements EnvironmentAware {
         dbCount = Integer.valueOf(environment.getProperty(prefix + "dbCount"));
         tbCount = Integer.valueOf(environment.getProperty(prefix + "tbCount"));
         routerKey = environment.getProperty(prefix + "routerKey");
+        routerStrategy = environment.getProperty(prefix + "routerStrategy");
 
         // 分库分表数据源
         String dataSources = environment.getProperty(prefix + "list");

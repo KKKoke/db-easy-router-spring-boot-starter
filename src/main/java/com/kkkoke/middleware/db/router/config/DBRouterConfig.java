@@ -28,4 +28,9 @@ public class DBRouterConfig {
      * 路由字段
      */
     private String routerKey;
+
+    /**
+     * 路由策略
+     */
+    private String routerStrategy;
 }
