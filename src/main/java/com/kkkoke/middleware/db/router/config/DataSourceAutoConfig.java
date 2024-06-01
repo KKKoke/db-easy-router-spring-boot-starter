@@ -1,7 +1,6 @@
 package com.kkkoke.middleware.db.router.config;
 
-import com.kkkoke.middleware.db.router.DBRouterConfig;
-import com.kkkoke.middleware.db.router.DBRouterJoinPoint;
+import com.kkkoke.middleware.db.router.aspect.DBRouterJoinPoint;
 import com.kkkoke.middleware.db.router.dynamic.DynamicDataSource;
 import com.kkkoke.middleware.db.router.dynamic.DynamicMybatisPlugin;
 import com.kkkoke.middleware.db.router.strategy.IDBRouterStrategy;

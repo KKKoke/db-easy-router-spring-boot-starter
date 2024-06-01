@@ -1,4 +1,4 @@
-package com.kkkoke.middleware.db.router;
+package com.kkkoke.middleware.db.router.util;
 
 /**
  * @author KeyCheung
@@ -11,27 +11,27 @@ public class DBContextHolder {
 
     private static final ThreadLocal<String> tbKey = new ThreadLocal<>();
 
-    public static void setDBKey(String dbKeyIdx){
+    public static void setDBKey(String dbKeyIdx) {
         dbKey.set(dbKeyIdx);
     }
 
-    public static String getDBKey(){
+    public static String getDBKey() {
         return dbKey.get();
     }
 
-    public static void setTBKey(String tbKeyIdx){
+    public static void setTBKey(String tbKeyIdx) {
         tbKey.set(tbKeyIdx);
     }
 
-    public static String getTBKey(){
+    public static String getTBKey() {
         return tbKey.get();
     }
 
-    public static void clearDBKey(){
+    public static void clearDBKey() {
         dbKey.remove();
     }
 
-    public static void clearTBKey(){
+    public static void clearTBKey() {
         tbKey.remove();
     }
 }

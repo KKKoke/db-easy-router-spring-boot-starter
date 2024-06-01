@@ -1,4 +1,4 @@
-package com.kkkoke.middleware.db.router;
+package com.kkkoke.middleware.db.router.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

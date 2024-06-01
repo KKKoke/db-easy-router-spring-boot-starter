@@ -1,19 +1,17 @@
 package com.kkkoke.middleware.db.router.strategy.impl;
 
-import com.kkkoke.middleware.db.router.DBContextHolder;
-import com.kkkoke.middleware.db.router.DBRouterConfig;
+import com.kkkoke.middleware.db.router.config.DBRouterConfig;
 import com.kkkoke.middleware.db.router.strategy.IDBRouterStrategy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.kkkoke.middleware.db.router.util.DBContextHolder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author KeyCheung
  * @date 2023/07/15
  * @desc 哈希路由
  */
+@Slf4j
 public class DBRouterStrategyHashCode implements IDBRouterStrategy {
-
-    private Logger logger = LoggerFactory.getLogger(DBRouterStrategyHashCode.class);
 
     private DBRouterConfig dbRouterConfig;
 
@@ -35,8 +33,10 @@ public class DBRouterStrategyHashCode implements IDBRouterStrategy {
 
         // 设置到 ThreadLocal
         DBContextHolder.setDBKey(String.format("%02d", dbIdx));
+        log.info("DBContextHolder.setDBKey: " + DBContextHolder.getDBKey());
         DBContextHolder.setTBKey(String.format("%03d", tbIdx));
-        logger.debug("数据库路由 dbIdx：{} tbIdx：{}",  dbIdx, tbIdx);
+
+        log.info("数据库路由 dbIdx：{} tbIdx：{}",  dbIdx, tbIdx);
     }
 
     @Override

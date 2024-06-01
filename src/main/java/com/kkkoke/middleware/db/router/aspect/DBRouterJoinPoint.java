@@ -1,7 +1,9 @@
-package com.kkkoke.middleware.db.router;
+package com.kkkoke.middleware.db.router.aspect;
 
 import com.kkkoke.middleware.db.router.annotation.DBRouter;
+import com.kkkoke.middleware.db.router.config.DBRouterConfig;
 import com.kkkoke.middleware.db.router.strategy.IDBRouterStrategy;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -10,8 +12,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -21,10 +21,9 @@ import java.lang.reflect.Method;
  * @date 2023/07/16
  * @desc 数据路由切面，通过自定义注解的方式，拦截被切面的方法，进行数据库路由
  */
+@Slf4j
 @Aspect
 public class DBRouterJoinPoint {
-
-    private Logger logger = LoggerFactory.getLogger(DBRouterJoinPoint.class);
 
     private DBRouterConfig dbRouterConfig;
 
@@ -90,7 +89,7 @@ public class DBRouterJoinPoint {
                 // fix: 使用lombok时，uId这种字段的get方法与idea生成的get方法不同，会导致获取不到属性值，改成反射获取解决
                 fieldValue = String.valueOf(this.getValueByName(arg, attr));
             } catch (Exception e) {
-                logger.error("获取路由属性值失败 attr: {}", attr, e);
+                log.error("获取路由属性值失败 attr: {}", attr, e);
             }
         }
         return fieldValue;
